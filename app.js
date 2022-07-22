@@ -7,42 +7,52 @@ const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
 const items = ["Buy Food", "Cook Food", "Eat Food"];
 const workItems = [];
-// use express, body-parser, and create static public folder for css
+// create app using express, use body-parser, and create static public folder for css
 const app = express();
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.static("public"));
 // set up views directory and template for ejs to utilize
 app.set('view engine', 'ejs');
 // get and render data for the current day, also renders new list items
 app.get("/", function (req, res) {
-const day = date.getDate();
-    res.render("list", {listTitle: day, newListItems: items});
+    const day = date.getDate();
+    res.render("list", {
+        listTitle: day,
+        newListItems: items
+    });
 });
 // receive new item entry and push to item array
-app.post("/", function(req, res){
-   const item = req.body.newItem;
-   if (req.body.list === "Work") {
-    workItems.push(item);
-    res.redirect("/work");
-   } else {
-       items.push(item);
-     res.redirect("/");
-   }
+app.post("/", function (req, res) {
+    const item = req.body.newItem;
+    if (req.body.list === "Work") {
+        workItems.push(item);
+        res.redirect("/work");
+    } else {
+        items.push(item);
+        res.redirect("/");
+    }
 });
 // create a work list
-app.get("/work", function(req, res){
-res.render("list", {listTitle: "Work List", newListItems: workItems});
+app.get("/work", function (req, res) {
+    res.render("list", {
+        listTitle: "Work List",
+        newListItems: workItems
+    });
 });
-app.post("/work", function(req, res){
-const item = req.body.newItem;
-workItems.push(item);
-res.redirect("/work");
+app.post("/work", function (req, res) {
+    const item = req.body.newItem;
+    workItems.push(item);
+    res.redirect("/work");
 });
 // about page route
-app.get("/about", function(req, res){
-res.render("about");
+app.get("/about", function (req, res) {
+    res.render("about");
 });
 // express local server
 app.listen(3000, function () {
     console.log("Server started on port 3000.")
 });
+
+// C:\Program Files\MongoDB\Server\6.0\data\
